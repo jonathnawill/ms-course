@@ -1,7 +1,5 @@
 package com.devsuperior.hruser.resourcers;
 
-import java.util.Collections;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +28,13 @@ public class UserResource {
 	}
 
 	@GetMapping(value = "/search")
-
 	public ResponseEntity<User> findByEmail(@RequestParam String email) {
 
-		User obj = repository.findByEmail(email);
-
-		if (obj == null) {
-			return ResponseEntity.notFound().build();
+		try {
+			User obj = repository.findByEmail(email);
+			return ResponseEntity.ok(obj);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		return ResponseEntity.ok(obj);
 	}
 }
